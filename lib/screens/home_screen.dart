@@ -1,7 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,28 +14,31 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final VideoPlayerController _controller;
   final ConfettiController _confettiController = ConfettiController();
+  final player = AudioPlayer(playerId: "audio_id");
 
-  @override
-  void initState() {
-    _controller = VideoPlayerController.asset(
-      "assets/video.mp4",
-    )..initialize().then((_) {
-        _controller.play();
-        _controller.setLooping(true);
-        setState(() {});
-      });
-    _confettiController.play();
-    playMusic();
-    super.initState();
+  void playVideo() {
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(
+          "https://github.com/Boburbro/eid_mubarak/raw/main/assets/video.mp4"),
+    )..initialize();
+    _controller.play();
+    _controller.setLooping(true);
   }
 
   void playMusic() {
-    final player = AudioPlayer(playerId: "audio_id");
-    // await player.play(AssetSource("assets/music.mp3"));
-    player.play(UrlSource(
-        "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3"));
+    player.play(
+      UrlSource(
+          "https://github.com/Boburbro/eid_mubarak/raw/main/assets/music.mp3"),
+    );
     player.setReleaseMode(ReleaseMode.loop);
-    // await player.setSourceAsset('assets/music.mp3');
+  }
+
+  @override
+  void initState() {
+    playVideo();
+    playMusic();
+    _confettiController.play();
+    super.initState();
   }
 
   @override
